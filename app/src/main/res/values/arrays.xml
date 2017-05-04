@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="sub_activities">
-        <item>基本用法</item>
+        <item>RxJava 1.x 基本用法</item>
     </string-array>
 </resources>

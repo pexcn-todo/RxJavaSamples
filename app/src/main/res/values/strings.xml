@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">RxJava Samples</string>
 
+    <!-- Activity -->
     <string name="activity_base_usage_fetch_data">从 GitHub API 获取数据</string>
 </resources>
