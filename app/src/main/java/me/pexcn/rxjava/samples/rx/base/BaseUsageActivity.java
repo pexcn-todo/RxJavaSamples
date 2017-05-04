@@ -86,6 +86,11 @@ public class BaseUsageActivity extends BaseActivity {
                 })
 
                 /**
+                 * 切换线程到 computation 线程
+                 */
+                .subscribeOn(Schedulers.computation())
+
+                /**
                  * 转换对象
                  */
                 .map(new Func1<Repo, String>() {
@@ -122,11 +127,8 @@ public class BaseUsageActivity extends BaseActivity {
                             @Override
                             public void onCompleted() {
                                 LogUtils.d("Subscriber -> onCompleted() -> " + Thread.currentThread());
-                                LogUtils.d("Repos size = " + mTitles.size());
-
                                 mTitleAdapter.notifyDataSetChanged();
-
-                                Toast.makeText(BaseUsageActivity.this, "加载完成", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(BaseUsageActivity.this, "加载完成：" + mTitles.size() + "条", Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
@@ -145,7 +147,7 @@ public class BaseUsageActivity extends BaseActivity {
 //                        /**
 //                         * 创建一个观察者 Observer, 它是事件消费者的最小构建模块
 //                         */
-//                        new Observer<Repo>() {
+//                        new Observer<String>() {
 //                            @Override
 //                            public void onCompleted() {
 //
@@ -157,7 +159,7 @@ public class BaseUsageActivity extends BaseActivity {
 //                            }
 //
 //                            @Override
-//                            public void onNext(Repo repo) {
+//                            public void onNext(String title) {
 //
 //                            }
 //                        }
@@ -165,9 +167,9 @@ public class BaseUsageActivity extends BaseActivity {
 //                        /**
 //                         * 观察者 Observer 的不完整回调 ActionX
 //                         */
-//                        new Action1<Repo>() {
+//                        new Action1<String>() {
 //                            @Override
-//                            public void call(Repo repo) {
+//                            public void call(String title) {
 //
 //                            }
 //                        }
