@@ -12,7 +12,4 @@ import rx.Observable;
 public interface GitHubService {
     @GET("users/pexcn/repos")
     Observable<List<Repo>> fetchRepos();
-
-//    @GET("users/pexcn/repos")
-//    Observable<Repo> fetchRepos();
 }

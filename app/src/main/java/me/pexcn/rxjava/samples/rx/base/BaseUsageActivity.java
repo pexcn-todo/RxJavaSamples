@@ -52,9 +52,9 @@ public class BaseUsageActivity extends BaseActivity {
     }
 
     @OnClick(R.id.fetch_data)
-    public void onFetchData(View view) {
-        if (!mTitles.isEmpty()) {
-            mTitles.clear();
+    public void onFetchData(final View view) {
+        if (view.isEnabled()) {
+            view.setEnabled(false);
         }
 
         /**
@@ -117,6 +117,9 @@ public class BaseUsageActivity extends BaseActivity {
                             @Override
                             public void onStart() {
                                 LogUtils.d("onStart() -> " + Thread.currentThread().getName());
+                                if (!mTitles.isEmpty()) {
+                                    mTitles.clear();
+                                }
                             }
 
                             @Override
@@ -124,12 +127,18 @@ public class BaseUsageActivity extends BaseActivity {
                                 LogUtils.d("onCompleted() -> " + Thread.currentThread().getName());
                                 mTitleAdapter.notifyDataSetChanged();
                                 Toast.makeText(BaseUsageActivity.this, "加载完成：" + mTitles.size() + "条", Toast.LENGTH_SHORT).show();
+                                if (!view.isEnabled()) {
+                                    view.setEnabled(true);
+                                }
                             }
 
                             @Override
                             public void onError(Throwable e) {
                                 LogUtils.d("onError() -> " + Thread.currentThread());
                                 Toast.makeText(BaseUsageActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
+                                if (!view.isEnabled()) {
+                                    view.setEnabled(true);
+                                }
                             }
 
                             @Override

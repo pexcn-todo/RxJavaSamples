@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by pexcn on 2017-05-04.
  */
+@SuppressWarnings("unused")
 public class Repo {
     private int id;
     private String name;
@@ -629,6 +630,7 @@ public class Repo {
         this.default_branch = default_branch;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static class OwnerBean {
         private String login;
         private int id;
