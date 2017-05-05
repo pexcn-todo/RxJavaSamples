@@ -15,22 +15,9 @@
         android:text="@string/activity_base_usage_fetch_data"
         android:textAllCaps="false" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5">
-
-        <TextView
-            android:id="@+id/json_raw_data"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </ScrollView>
-
     <ListView
         android:id="@+id/title_list"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>

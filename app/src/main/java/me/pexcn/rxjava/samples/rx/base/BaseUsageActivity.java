@@ -3,7 +3,6 @@ package me.pexcn.rxjava.samples.rx.base;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -14,12 +13,9 @@ import butterknife.OnClick;
 import me.pexcn.android.utils.io.LogUtils;
 import me.pexcn.rxjava.samples.BaseActivity;
 import me.pexcn.rxjava.samples.R;
-import me.pexcn.rxjava.samples.api.Api;
 import me.pexcn.rxjava.samples.api.GitHubService;
 import me.pexcn.rxjava.samples.entity.Repo;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
+import me.pexcn.rxjava.samples.utils.RetrofitUtils;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -36,8 +32,6 @@ public class BaseUsageActivity extends BaseActivity {
     private GitHubService mGitHubService;
     private Subscriber<String> mTitleSubscriber;
 
-    @BindView(R.id.json_raw_data)
-    TextView mSourceDataTextView;
     @BindView(R.id.title_list)
     ListView mTitleList;
 
@@ -54,25 +48,29 @@ public class BaseUsageActivity extends BaseActivity {
         mTitleAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mTitles);
         mTitleList.setAdapter(mTitleAdapter);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Api.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-        mGitHubService = retrofit.create(GitHubService.class);
+        mGitHubService = RetrofitUtils.createService(GitHubService.class);
     }
 
     @OnClick(R.id.fetch_data)
     public void onFetchData(View view) {
+        if (!mTitles.isEmpty()) {
+            mTitles.clear();
+        }
+
         /**
          * 获得被观察者 Observable
          */
         mGitHubService.fetchRepos()
 
                 /**
-                 * 指定被观察者 Observable 的线程，即产生事件的线程，这里指 fetchStories() 发生在 io 线程
+                 * 指定发射数据的线程
                  */
                 .subscribeOn(Schedulers.io())
+
+                /**
+                 * 事件流经过这里会切换到指定线程执行
+                 */
+                .observeOn(Schedulers.io())
 
                 /**
                  * 平铺对象，把 List<Story> 转换成 一个一个的 Story
@@ -80,15 +78,15 @@ public class BaseUsageActivity extends BaseActivity {
                 .flatMap(new Func1<List<Repo>, Observable<Repo>>() {
                     @Override
                     public Observable<Repo> call(List<Repo> repos) {
-                        LogUtils.d("Observable -> flatMap() -> " + Thread.currentThread());
+                        LogUtils.d("flatMap() -> " + Thread.currentThread().getName());
                         return Observable.from(repos);
                     }
                 })
 
                 /**
-                 * 切换线程到 computation 线程
+                 * 重新指定 flatMap() 里 Observable.from(repos) 作为发射数据的线程
                  */
-                .subscribeOn(Schedulers.computation())
+                .subscribeOn(Schedulers.io())
 
                 /**
                  * 转换对象
@@ -96,13 +94,13 @@ public class BaseUsageActivity extends BaseActivity {
                 .map(new Func1<Repo, String>() {
                     @Override
                     public String call(Repo repo) {
-                        LogUtils.d("Observable -> map() -> " + Thread.currentThread());
+                        LogUtils.d("map() -> " + Thread.currentThread().getName());
                         return repo.getName();
                     }
                 })
 
                 /**
-                 * 指定观察者 Observer 的线程，即处理事件的线程，这里指在 UI 线程处理事件
+                 * 切换到主线程处理事件
                  */
                 .observeOn(AndroidSchedulers.mainThread())
 
@@ -118,28 +116,25 @@ public class BaseUsageActivity extends BaseActivity {
                         mTitleSubscriber = new Subscriber<String>() {
                             @Override
                             public void onStart() {
-                                LogUtils.d("Subscriber -> onStart() -> " + Thread.currentThread());
-                                if (!mTitles.isEmpty()) {
-                                    mTitles.clear();
-                                }
+                                LogUtils.d("onStart() -> " + Thread.currentThread().getName());
                             }
 
                             @Override
                             public void onCompleted() {
-                                LogUtils.d("Subscriber -> onCompleted() -> " + Thread.currentThread());
+                                LogUtils.d("onCompleted() -> " + Thread.currentThread().getName());
                                 mTitleAdapter.notifyDataSetChanged();
                                 Toast.makeText(BaseUsageActivity.this, "加载完成：" + mTitles.size() + "条", Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
                             public void onError(Throwable e) {
-                                LogUtils.d("Subscriber -> onError() -> " + Thread.currentThread());
-                                Toast.makeText(BaseUsageActivity.this, "加载数据时出现错误", Toast.LENGTH_SHORT).show();
+                                LogUtils.d("onError() -> " + Thread.currentThread());
+                                Toast.makeText(BaseUsageActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
                             public void onNext(String title) {
-                                LogUtils.d("Subscriber -> onNext() -> " + Thread.currentThread());
+                                LogUtils.d("onNext() -> " + Thread.currentThread().getName());
                                 mTitles.add(title);
                             }
                         }
