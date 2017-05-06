@@ -49,13 +49,12 @@ public class RetrofitUtils {
 
     private static Interceptor buildLoggingInterceptor() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.HEADERS : HttpLoggingInterceptor.Level.NONE);
+        interceptor.setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BASIC : HttpLoggingInterceptor.Level.NONE);
         return interceptor;
     }
 
-    @SuppressWarnings("ConstantConditions")
     private static Cache buildCache() {
-        File file = new File(Utils.getContext().getExternalCacheDir().getAbsolutePath() + File.separator + "okhttp_cache");
+        File file = new File(Utils.getContext().getCacheDir().getAbsolutePath() + File.separator + "okhttp_cache");
         return new Cache(file, 1024 * 1024 * 32);
     }
 }

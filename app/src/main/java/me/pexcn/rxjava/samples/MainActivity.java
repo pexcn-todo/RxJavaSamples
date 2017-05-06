@@ -6,7 +6,7 @@ import android.widget.ListView;
 
 import butterknife.BindView;
 import butterknife.OnItemClick;
-import me.pexcn.rxjava.samples.rx.base.BaseUsageActivity;
+import me.pexcn.rxjava.samples.rx1.base.BaseUsageActivity;
 
 public class MainActivity extends BaseActivity {
     private String[] mItems;
