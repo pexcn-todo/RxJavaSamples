@@ -62,9 +62,10 @@ public class BaseUsageActivity extends BaseActivity {
             @Override
             public void onStart() {
                 LogUtils.d("onStart() -> " + Thread.currentThread().getName());
-//                if (!mItems.isEmpty()) {
-//                    mItems.clear();
-//                }
+                if (!mItems.isEmpty()) {
+                    mItems.clear();
+                }
+                mAdapter.notifyDataSetChanged();
             }
 
             @Override
