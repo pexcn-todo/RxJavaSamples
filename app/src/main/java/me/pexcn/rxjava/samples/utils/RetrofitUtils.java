@@ -39,11 +39,11 @@ public class RetrofitUtils {
     private static OkHttpClient buildOkHttpClient() {
         return new OkHttpClient.Builder()
                 .addInterceptor(buildLoggingInterceptor())
-                .cache(buildCache())
                 .retryOnConnectionFailure(true)
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(10, TimeUnit.SECONDS)
+                .cache(buildCache())
                 .build();
     }
 

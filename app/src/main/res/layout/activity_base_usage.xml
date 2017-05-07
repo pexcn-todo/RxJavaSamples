@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="me.pexcn.rxjava.samples.rx.base.BaseUsageActivity">
+    tools:context="me.pexcn.rxjava.samples.rx1.base.BaseUsageActivity">
 
     <include layout="@layout/toolbar_in_appbar" />
 
@@ -16,7 +16,7 @@
         android:textAllCaps="false" />
 
     <ListView
-        android:id="@+id/title_list"
+        android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

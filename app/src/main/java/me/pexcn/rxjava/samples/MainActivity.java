@@ -1,18 +1,17 @@
 package me.pexcn.rxjava.samples;
 
 import android.content.Intent;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import butterknife.BindView;
-import butterknife.OnItemClick;
 import me.pexcn.rxjava.samples.rx1.base.BaseUsageActivity;
 
-public class MainActivity extends BaseActivity {
+@SuppressWarnings("FieldCanBeLocal")
+public class MainActivity extends BaseActivity implements AdapterView.OnItemClickListener {
     private String[] mItems;
-
-    @BindView(R.id.list_view)
-    ListView mListView;
+    private ListView mListView;
 
     @Override
     protected int getLayoutId() {
@@ -23,11 +22,20 @@ public class MainActivity extends BaseActivity {
     protected void init() {
         super.init();
         mItems = getResources().getStringArray(R.array.sub_activities);
+        mListView = (ListView) findViewById(R.id.list_view);
         mListView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mItems));
+        mListView.setOnItemClickListener(this);
     }
 
-    @OnItemClick(R.id.list_view)
-    void onItemClick(int position) {
+    private void setTargetActivity(int position, Class<?> clazz) {
+        Intent intent = new Intent();
+        intent.setClass(this, clazz);
+        intent.putExtra(KEY_ACTIVITY_TITLE, mItems[position]);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         switch (position) {
             case 0:
                 setTargetActivity(position, BaseUsageActivity.class);
@@ -36,12 +44,5 @@ public class MainActivity extends BaseActivity {
                 setTargetActivity(position, BaseUsageActivity.class);
                 break;
         }
-    }
-
-    private void setTargetActivity(int position, Class<?> clazz) {
-        Intent intent = new Intent();
-        intent.setClass(this, clazz);
-        intent.putExtra(KEY_ACTIVITY_TITLE, mItems[position]);
-        startActivity(intent);
     }
 }
