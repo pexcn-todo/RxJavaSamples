@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import me.pexcn.rxjava.samples.rx1.base.BaseUsageActivity;
+import me.pexcn.rxjava.samples.rx1.base.TestActivity;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class MainActivity extends BaseActivity implements AdapterView.OnItemClickListener {
@@ -41,7 +42,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
                 setTargetActivity(position, BaseUsageActivity.class);
                 break;
             case 1:
-                setTargetActivity(position, BaseUsageActivity.class);
+                setTargetActivity(position, TestActivity.class);
                 break;
         }
     }

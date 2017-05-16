@@ -19,6 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".rx1.base.BaseUsageActivity" />
+        <activity android:name=".rx1.base.TestActivity" />
     </application>
 
 </manifest>

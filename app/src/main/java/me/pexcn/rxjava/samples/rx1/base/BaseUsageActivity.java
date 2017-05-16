@@ -133,7 +133,7 @@ public class BaseUsageActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        if (mSubscriber.isUnsubscribed()) {
+        if (mSubscriber != null && mSubscriber.isUnsubscribed()) {
             LogUtils.d("unsubscribe()");
             mSubscriber.unsubscribe();
         }

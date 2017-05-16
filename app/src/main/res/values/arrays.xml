@@ -2,5 +2,6 @@
 <resources>
     <string-array name="sub_activities">
         <item>RxJava 1.x 基本用法</item>
+        <item>Test</item>
     </string-array>
 </resources>
