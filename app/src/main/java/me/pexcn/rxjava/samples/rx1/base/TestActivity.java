@@ -24,8 +24,8 @@ public class TestActivity extends BaseActivity {
     }
 
     private static final int INT_1 = 1;
-    private static final int INT_2 = 2;
-    private static final int INT_3 = 3;
+    private static final int INT_2 = INT_1 << 1;
+    private static final int INT_3 = INT_2 << 1;
 
     @IntDef(flag = true, value = {INT_1, INT_2, INT_3})
     private @interface IntType {
